@@ -17,6 +17,8 @@ public class ReservationService {
     private final ReservationMapper reservationMapper;
 
     public ReservationDTO bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
+            //validate guestId and scheduleId
+
         throw new UnsupportedOperationException();
     }
 
