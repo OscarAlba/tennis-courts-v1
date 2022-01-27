@@ -1,12 +1,17 @@
 package com.tenniscourts.reservations;
 
 import com.tenniscourts.exceptions.EntityNotFoundException;
+import com.tenniscourts.guests.Guest;
+import com.tenniscourts.guests.GuestRepository;
+import com.tenniscourts.schedules.Schedule;
+import com.tenniscourts.schedules.ScheduleRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -16,10 +21,36 @@ public class ReservationService {
 
     private final ReservationMapper reservationMapper;
 
-    public ReservationDTO bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
-            //validate guestId and scheduleId
+    private final GuestRepository guestRepository;
 
-        throw new UnsupportedOperationException();
+    private final ScheduleRepository scheduleRepository;
+
+    public ReservationDTO bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
+
+        //Validate GuestId and ScheduleId
+        Optional<Guest> guest = guestRepository.findById(createReservationRequestDTO.getGuestId());
+        Optional<Schedule> schedule = scheduleRepository.findById(createReservationRequestDTO.getScheduleId());
+
+        if(!guest.isPresent() && !schedule.isPresent()){
+            throw new IllegalArgumentException("GuestId and ScheduleId not found.");
+        }else if(!guest.isPresent() && schedule.isPresent()){
+            throw new IllegalArgumentException("GuestId not found.");
+        }else if(guest.isPresent() && !schedule.isPresent()){
+            throw new IllegalArgumentException("ScheduleId not found.");
+        }
+
+        //Create Entity
+        Reservation reservation = Reservation.builder()
+                .guest(guest.get())
+                .schedule(schedule.get())
+                .value(new BigDecimal(150))
+                .reservationStatus(ReservationStatus.READY_TO_PLAY)
+                .build();
+
+        //persist
+        reservationRepository.save(reservation);
+
+        return reservationMapper.map(reservation);
     }
 
     public ReservationDTO findReservation(Long reservationId) {

@@ -21,6 +21,7 @@ public class ScheduleController extends BaseRestController {
     @PostMapping(value = "/add")
     public ResponseEntity<Void> addScheduleTennisCourt(@RequestBody CreateScheduleRequestDTO
                                                                    createScheduleRequestDTO) {
+        String pos = "afdsfa";
         return ResponseEntity.created(locationByEntity(
                 scheduleService.addSchedule(createScheduleRequestDTO.getTennisCourtId(),
                         createScheduleRequestDTO).getId())).build();
