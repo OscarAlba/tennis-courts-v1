@@ -13,7 +13,7 @@ public class TennisCourtController extends BaseRestController {
     private final TennisCourtService tennisCourtService;
 
     //TODO: implement rest and swagger
-    @PostMapping
+    @PostMapping(value = "/addTennisCourt")
     public ResponseEntity<Void> addTennisCourt(@RequestBody TennisCourtDTO tennisCourtDTO) {
         return ResponseEntity.created(locationByEntity(tennisCourtService.addTennisCourt(tennisCourtDTO).getId())).build();
     }
