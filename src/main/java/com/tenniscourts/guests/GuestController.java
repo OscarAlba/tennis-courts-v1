@@ -40,9 +40,8 @@ public class GuestController extends BaseRestController {
     }
 
     @PutMapping(value = "/update/{guestId}")
-    public ResponseEntity<GuestDTO> updateGuest(@ApiParam("Guest request payload")
-                                            @RequestBody CreateGuestRequestDTO createGuestRequestDTO,
-                                            @ApiParam("Guest Id") @PathVariable Long guestId){
+    public ResponseEntity<GuestDTO> updateGuest( @RequestBody CreateGuestRequestDTO createGuestRequestDTO,
+                                            @PathVariable Long guestId){
 
         GuestDTO dto = guestService.updateGuest(createGuestRequestDTO, guestId);
         ResponseEntity.created(locationByEntity(dto.getId())).build();

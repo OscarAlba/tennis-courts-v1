@@ -15,3 +15,4 @@ public interface GuestMapper {
 
     List<GuestDTO> map(List<Guest> source);
 }
+
